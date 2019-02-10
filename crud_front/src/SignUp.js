@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PrimarySearchAppBar from './Components/PrimarySearchAppBar';
-import ButtonBases from './Components/ButtonBases';
 import './App.css';
 
-class App extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,13 +15,12 @@ class App extends Component {
     return (
       <div>
         <PrimarySearchAppBar/>
-        <ButtonBases/>
       </div>
     );
   }
 }
 
-export default App;
+export default SignUp;
 
 
 
