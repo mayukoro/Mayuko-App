@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import PrimarySearchAppBar from './Components/PrimarySearchAppBar';
 import ButtonBases from './Components/ButtonBases';
+import SingleLineGridList from './Components/SingleLineGridList';
 import './App.css';
+// import classes from '*.module.scss';
+
+
 
 class App extends Component {
   constructor(props) {
@@ -17,10 +24,17 @@ class App extends Component {
       <div>
         <PrimarySearchAppBar/>
         <ButtonBases/>
+      <Grid container spacing={24}> 
+      <Grid item xs={12}>
+        <SingleLineGridList/>
+      </Grid>
+      </Grid>
       </div>
     );
   }
 }
+
+
 
 export default App;
 

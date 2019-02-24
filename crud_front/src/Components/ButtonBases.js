@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import { lightBlue500 } from 'material-ui/styles/colors';
 
 const styles = theme => ({
   root: {
@@ -16,7 +17,8 @@ const styles = theme => ({
   },
   image: {
     position: 'relative',
-    height: 500,
+    height: 450,
+    backgroundColor: lightBlue500,
     [theme.breakpoints.down('xs')]: {
       width: '100% !important', // Overrides inline-style
       height: 100,
@@ -124,6 +126,7 @@ const images = [
     url: 'http://www.flickr.com/photos/lng0004/7864852790/',
     title: 'New App',
     width: '100%',
+    
   },
   // {
   //   url: '../images/Sea.jpg',
@@ -168,7 +171,7 @@ function ButtonBases(props) {
             >
               {image.title}
               <p>話したい言語は？</p>
-              <div className={classes.search}>
+            <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
