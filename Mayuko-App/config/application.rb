@@ -38,5 +38,6 @@ module MayukoApp
         :headers => :any,
         :methods => [:get, :post, :patch, :delete, :options]
       end
+    end
   end
 end

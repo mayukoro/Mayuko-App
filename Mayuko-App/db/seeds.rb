@@ -8,5 +8,18 @@
 Product.create([
   {product: "犬"},
   {product: "猫"},
-  {product: "馬"}
+  {product: "馬"},
+  {product: "牛"}
+])
+
+User.create([
+  {firstname:"まゆこ",
+   lastname:"きてら",
+   age:27},
+   {firstname:"太郎",
+   lastname:"山田",
+   age:27},
+   {firstname:"花子",
+   lastname:"山田",
+   age:27}
 ])

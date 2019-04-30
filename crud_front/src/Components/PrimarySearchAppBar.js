@@ -1,23 +1,27 @@
 import React from 'react';
+import Axios from 'axios';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import FormDialog from './FormDialog';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({
   root: {
@@ -93,6 +97,8 @@ class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    user:null,
+    userId:null
   };
 
   handleProfileMenuOpen = event => {
@@ -112,11 +118,67 @@ class PrimarySearchAppBar extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleChangeMail = mail => event => {
+    this.setState({ [mail]: event.target.value });
+  };
+
+  handleChangePassword = password => event => {
+    this.setState({ [password]: event.target.value });
+  };
+
+  
+
+  handleToSignUpPage = () => {
+    this.props.history.push('/signup');
+  }
+
+ 
+  
+  handleToSignIn= () => {
+        Axios.post('http://localhost:3001/users/signin' , 
+        { mail: this.state.mail,
+          password: this.state.password
+        })
+        .then((results) => {
+          console.log(results.data);
+          if(results.data[0]){
+            console.log(results);
+            this.setState({user:results.data[0].firstname})
+            this.setState({userId:results.data[0].id})
+            this.setState({ open: false });
+          }
+          else{
+            console.log('error');
+          }
+        })
+        .catch((error) =>{
+          console.log(error)
+        })
+    
+    
+  }
+
+  handleToProfilePage = () => {
+    this.props.history.push('/users/'+ {userId});
+  }
+  
+
+   
+
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const userId=this.state.userId
 
     const renderMenu = (
       <Menu
@@ -126,7 +188,8 @@ class PrimarySearchAppBar extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={this.handleToProfilePage}>Profile</MenuItem>
+       
         <MenuItem onClick={this.handleMenuClose}>Create Events</MenuItem>
       </Menu>
     );
@@ -166,6 +229,7 @@ class PrimarySearchAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
+      
         <AppBar position="static">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
@@ -192,20 +256,71 @@ class PrimarySearchAppBar extends React.Component {
                 onClick={this.handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+              <AccountCircle />
+                
+                 <Typography　color="inherit">　{this.state.user}</Typography>
+  
               </IconButton>
+             
+           
+              
             </div>
             <div className={classes.sectionMobile}>
               <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
                 <MoreIcon />
               </IconButton>
             </div>
-            <FormDialog/>
-            <Button color="inherit">Sign Up</Button>
+            <Button  color="inherit" onClick={this.handleClickOpen}>
+              Sign in
+            </Button>
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Sign In Page</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  メールアドレスとパスワードを入力してください。
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Email Address"
+                  type="mail"
+                  value={this.state.mail}
+                  onChange={this.handleChangeMail('mail')}
+                  fullWidth
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Password"
+                  type="password"
+                  value={this.state.password}
+                  onChange={this.handleChangePassword('password')}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={this.handleToSignIn} color="primary">
+                  Sign In
+                </Button>
+              </DialogActions>
+            </Dialog>
+            {/* <Link color="inherit" to="/signup"> */}
+              <Button onClick={this.handleToSignUpPage} color="inherit">Sign Up</Button>
+            {/* </Link> */}
           </Toolbar>
         </AppBar>
         {renderMenu}
         {renderMobileMenu}
+        
       </div>
     );
   }

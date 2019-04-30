@@ -3,6 +3,10 @@ class ProductsController < ApplicationController
         @product = Product.all
         render json: @product
       end
+      def show
+          @product = Product.find(params[:id])
+          render json: @product
+        end
     
       def create
         @product = Product.create(product: params[:product])

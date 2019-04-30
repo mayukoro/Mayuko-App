@@ -1,21 +1,8 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PrimarySearchAppBar from './Components/PrimarySearchAppBar';
-import SelectNationality from './Components/SelectNationality';
-import SelectAge from './Components/SelectAge';
-import SelectSex from './Components/SelectSex';
-import NameBox from './Components/NameBox';
-import MailPassBox from './Components/MailPassBox';
-import SelectLang from './Components/SelectLang';
 import UserPhoto from './Components/UserPhoto';
-import AlertDialog from './Components/AlertDialog';
-import OutlinedTextFields from './Components/Message';
-import DateAndTimePickers from './Components/DateTimePicker';
-import SelectTime from './Components/SelectTime';
-import SelectPlace from './Components/SelectPlace';
-import SelectPeople from './Components/SelectPeople';
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import './App.css';
 import Axios from 'axios';
@@ -34,15 +21,12 @@ const classes = theme => ({
 });
 
 
-class SignUp extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props)
     this.state = {
       open: false,
-      firstname: '',
-      lastname: '',
-      mail:'',
-      password:''
+      userId:14
     }
   }
 
@@ -63,21 +47,16 @@ class SignUp extends Component {
     this.setState({ [password]: event.target.value });
   };
 
-  handleClickOpen = () => {
-    Axios.post('http://localhost:3001/users/' ,
-    {
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
-      mail:this.state.mail,
-      password:this.state.password
-    })
+  componentDidMount = () => {
+    Axios.get('http://localhost:3001/users/'+ {id: this.state.userId})
     .then((results) => {
-      console.log(results)
+      console.log(results.data)
+      this.setState({userMail:results.data.mail})
+      this.setState({userPassword:results.data.password})
     })
     .catch((error) =>{
       console.log(error)
     })
-    alert(this.state.firstname + ' ' + this.state.lastname);
   }
   
   render() {
@@ -87,7 +66,7 @@ class SignUp extends Component {
         <PrimarySearchAppBar history= {this.props.history}/>
       <Grid container spacing={24}> 
         <Grid item xs={6}>
-         <UserPhoto/>
+         
         </Grid>
         <Grid item xs={6}>
         <TextField
@@ -110,19 +89,18 @@ class SignUp extends Component {
 
        <TextField
           id="standard-mail"
-          label="Mail Address"
+          label=""
           className={classes.textField}
-          value={this.state.mail}
+          value={this.state.userMail}
           onChange={this.handleChangeMail('mail')}
           margin="normal"
         />
        
         <TextField
           id="standard-password"
-          label="Password"
-          type="password"
+          label=""
           className={classes.textField}
-          value={this.state.password}
+          value={this.state.userPassword}
           onChange={this.handleChangePassword('password')}
           margin="normal"
         />
@@ -133,44 +111,12 @@ class SignUp extends Component {
      
         </Grid>
       </Grid>
-       
-         
      
       </div>
     );
   }
 }
 
-export default SignUp;
+export default Profile;
 
 
-
-
-// import React, { Component } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-
-// class App extends Component {
-//   render() {
-//     return (
-//       <div className="App">
-//         <header className="App-header">
-//           <img src={logo} className="App-logo" alt="logo" />
-//           <p>
-//             Edit <code>src/App.js</code> and save to reload.
-//           </p>
-//           <a
-//             className="App-link"
-//             href="https://reactjs.org"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             Learn React
-//           </a>
-//         </header>
-//       </div>
-//     );
-//   }
-// }
-
-// export default App;
